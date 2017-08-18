@@ -23,7 +23,7 @@ MongoClient.connect('mongodb://tester123:tester123@ds145223.mlab.com:45223/block
 })
 
 
-app.get('/seek', function(req, res)
+app.get('/seekAll', function(req, res)
 {
 
 	db.collection('blockchain_test_collection').find().toArray((err, result) => {
@@ -36,7 +36,7 @@ app.get('/seek', function(req, res)
 
 })
 
-app.get('/count', function(req, res)
+app.get('/GetCount', function(req, res)
 {
 
 	db.collection('blockchain_test_collection').count((err, result) => {
@@ -49,7 +49,7 @@ app.get('/count', function(req, res)
 
 })
 
-app.get('/insert', function(req, res) {
+app.get('/InsertUser', function(req, res) {
 	var queryName=req.query.name;
 	var address=req.query.address;
 
@@ -80,15 +80,37 @@ app.get('/ValidateUser', function(req, res) {
     		{
     			return console.log(err);
     		}
-    		if(result== null)
+
+    		if(Object.keys(result).length == 0)
     		{
-    			res.send("false");
+				res.send(false);
     		}
     		else
     		{
-    			res.send("true");
+    			res.send(true);
     		}
     	})
     
 	})
 
+
+app.get('/GetAddress', function(req, res) {
+  //res.send('Hello hello World')
+
+  		var userID=req.query.userName;
+  		db.collection('blockchain_test_collection').find({name:userID}).toArray((err, result) => {
+    		if (err) 
+    		{
+    			return console.log(err);
+    		}
+    		if(Object.keys(result).length == 0)
+    		{
+    			res.send("User does not exist");
+    		}
+    		else
+    		{
+    			res.send(result[0].Address);
+    		}
+    	})
+    
+	})
